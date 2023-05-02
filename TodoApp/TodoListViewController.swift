@@ -182,61 +182,64 @@ class TodoListViewController: UIViewController {
     }
     
     
-    extension TodoListViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-        
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            if var selectedTask = tasks?[indexPath.item] {
-                let addTodoItemVC = AddToDoItemViewController()
-//                addTodoItemVC.todoItemTitleTextField.text = selectedTask.title
-//                addTodoItemVC.descriptionTodoItemTextField.text = selectedTask.description
-                addTodoItemVC.selectedTask = selectedTask
-                addTodoItemVC.delegate = self
-
-//                selectedTask.title = addTodoItemVC.todoItemTitleTextField.text ?? ""
-//                selectedTask.description = addTodoItemVC.descriptionTodoItemTextField.text ?? ""
-//                print(selectedTask.title)
-//                print(selectedTask.description)
-               
-                updateTasks(at: indexPath.row, with: selectedTask)
-                navigationController?.pushViewController(addTodoItemVC, animated: true)
-                todoListCollectionView.reloadData()
-            } else {
-                fatalError("task is nil")
-            }
-        }
-        
-        
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return tasks?.count ?? 0
-        }
-        
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodoCollectionViewCell.cellId, for: indexPath) as? TodoCollectionViewCell else {
-                return UICollectionViewCell()
-            }
-            
-            //        cell.todoItemTitle.text = todoItemTitle[indexPath.row]
-            //        cell.todoItemDescription.text = todoItemDescription[indexPath.row]
-            //        return cell
+extension TodoListViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let addTodoItemVC = AddToDoItemViewController()
+        addTodoItemVC.delegate = self
+        
+        //            addTodoItemVC.selectedTask = tasks?[indexPath.item]
+        
+        navigationController?.pushViewController(addTodoItemVC, animated: true)
+        
+        if var selectedTask = tasks?[indexPath.item] {
+            addTodoItemVC.selectedTask = selectedTask
+            addTodoItemVC.selectedItemIndex = indexPath.item
+            //                selectedTask.title = addTodoItemVC.todoItemTitleTextField.text ?? ""
+            //                selectedTask.description = addTodoItemVC.descriptionTodoItemTextField.text ?? ""
+            //                print(selectedTask.title)
+            //                print(selectedTask.description)
             
-            if let taskTodo = tasks?[indexPath.row] {
-                cell.todoItemTitle.text = taskTodo.title
-                cell.todoItemDescription.text = taskTodo.description
-            }
-           
-            return cell
+            
+//            todoListCollectionView.reloadData()
+        } else {
+            fatalError("task is nil")
         }
-        
-        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            return CGSize(width: collectionView.bounds.width, height: 60)
-        }
-        
-        
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return tasks?.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodoCollectionViewCell.cellId, for: indexPath) as? TodoCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        //        cell.todoItemTitle.text = todoItemTitle[indexPath.row]
+        //        cell.todoItemDescription.text = todoItemDescription[indexPath.row]
+        //        return cell
+        
+        
+        if let taskTodo = tasks?[indexPath.row] {
+            cell.todoItemTitle.text = taskTodo.title
+            cell.todoItemDescription.text = taskTodo.description
+        }
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 60)
+    }
+}
+        
+
+    
 extension TodoListViewController: AddTodoItemDelegate {
-    func didUpdateTodoItem(at: Task) {
+    func didUpdateTodoItem(at: Int, with: Task) {
+        print("dd")
         DispatchQueue.main.async {
 //            var currentTodoItemTitle = UserDefaults.standard.stringArray(forKey: "todoItemsTitle") ?? []
 //            currentTodoItemTitle.append(title)
@@ -250,10 +253,12 @@ extension TodoListViewController: AddTodoItemDelegate {
             //            self.todoItemTitle = currentTodoItemTitle
             //            self.todoItemDescription = currentTodoItemDescription
             
-            self.updateTasks(at: todoListCollectionView., with: at)
+            self.updateTasks(at: at, with: with)
+            print(at)
             self.todoListCollectionView.reloadData()
         }
     }
+    
     
     func didAddTodoItem(with: Task) {
         

@@ -10,7 +10,7 @@ import SnapKit
 
 protocol AddTodoItemDelegate {
     func didAddTodoItem(with: Task)
-    func didUpdateTodoItem(at: Task)
+    func didUpdateTodoItem(at: Int, with: Task)
 
 }
 class AddToDoItemViewController: UIViewController {
@@ -149,14 +149,29 @@ class AddToDoItemViewController: UIViewController {
                 return
             }
             
-            if var task = self.selectedTask {
+//            if var task = self.selectedTask {
+//                task.title = title
+//                task.description = description
+//                self.selectedTask = task
+//                print(task.title)
+//                print(task.description)
+//                let updatedTask = task
+//                self.delegate?.didUpdateTodoItem(at: updatedTask)
+//            }
+            
+            if let indexPath = self.selectedItemIndex {
+                var task = self.selectedTask ?? Task()
                 task.title = title
                 task.description = description
                 self.selectedTask = task
+                self.delegate?.didUpdateTodoItem(at: indexPath, with: self.selectedTask!)
+//                task?.title = title
+//                task?.description = description
                 print(task.title)
                 print(task.description)
-                let updatedTask = task
-                self.delegate?.didUpdateTodoItem(at: updatedTask)
+//                print(indexPath)
+                
+                
             } else {
                 let newTask = Task(title: title, description: description)
                 
