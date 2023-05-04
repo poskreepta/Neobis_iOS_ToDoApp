@@ -4,6 +4,8 @@ use_frameworks!
 
 target 'TodoApp' do
   pod 'SnapKit', '~> 5.6.0'
+pod 'SwipeCellKit'
+
 
   # Pods for TodoApp
 

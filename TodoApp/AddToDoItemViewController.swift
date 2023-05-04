@@ -39,6 +39,17 @@ class AddToDoItemViewController: UIViewController {
         return button
     }()
     
+    lazy var deleteItemButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Удалить", for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        
+//        let button = UIButton(configuration: configuration, primaryAction: cancelItemButtonTapped())
+        button.addTarget(self, action: #selector(deleteItemButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     var todoItemTitleTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
@@ -87,10 +98,13 @@ class AddToDoItemViewController: UIViewController {
         view.backgroundColor = UIColor(hexString: "#F6F5F7")
         // Do any additional setup after loading the view.
         navigationController?.isNavigationBarHidden = true
+        deleteItemButton.isHidden = true
         
         if let task = selectedTask {
+            
             todoItemTitleTextField.text = task.title
             descriptionTodoItemTextField.text = task.description
+            
         }
         
 //        if let index = selectedItemIndex {
@@ -105,6 +119,7 @@ class AddToDoItemViewController: UIViewController {
         view.addSubview(descriptionTodoItemTextField)
         view.addSubview(saveItemButton)
         view.addSubview(cancelItemButton)
+        view.addSubview(deleteItemButton)
     }
     
     func setupConstraints() {
@@ -136,6 +151,11 @@ class AddToDoItemViewController: UIViewController {
             make.leading.equalTo(view.snp.leading).inset(30)
             make.trailing.equalTo(view.snp.trailing).inset(30)
             make.bottom.equalTo(view.snp.bottom).inset(100)
+        }
+        
+        deleteItemButton.snp.makeConstraints { make in
+            make.bottom.equalTo(view.snp.bottom).inset(50)
+            make.centerX.equalTo(view.snp.centerX)
         }
         
         
@@ -181,13 +201,19 @@ class AddToDoItemViewController: UIViewController {
                 print("koko")
             }
             
-           
+            self.navigationController?.popViewController(animated: true)
         }
+        
+
         return action
     }
     
     @objc func cancelItemButtonTapped() {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func deleteItemButtonTapped() {
+        
     }
 
 }
