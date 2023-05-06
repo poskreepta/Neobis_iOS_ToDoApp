@@ -111,7 +111,7 @@ class TodoCollectionViewCell: SwipeCollectionViewCell {
         }
         
         completeButton.snp.makeConstraints { make in
-            make.width.equalTo(20)
+            make.width.equalTo(30)
             make.height.equalTo(20)
             make.centerY.equalToSuperview()
             make.leading.equalTo(deleteButton).offset(30)

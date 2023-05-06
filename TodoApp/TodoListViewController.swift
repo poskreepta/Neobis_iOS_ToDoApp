@@ -13,12 +13,16 @@ class TodoListViewController: UIViewController {
 
     
     
-    var tasks: [Task]? = [] {
+    var tasks: [Task] = [] {
         // save todos when new object is created
         didSet {
             loadTasks()
+            welcomeLabel.isHidden = true
+            print(tasks)
+            print(tasks.count)
         }
     }
+
     
     var editingMode = false
     
@@ -31,6 +35,7 @@ class TodoListViewController: UIViewController {
     //        var todoItemTitle = [String]()
     //        var todoItemDescription = [String]()
     let cellId = "todoItemCellId"
+    
     
     private let welcomeLabel: UILabel = {
         let label = UILabel()
@@ -115,13 +120,13 @@ class TodoListViewController: UIViewController {
             finishDragAndDropTodoButton.isHidden = true
         }
         
-        if let tasks = tasks {
-            print(tasks.count)
-            if tasks.count == 0 {
-                welcomeLabel.isHidden = false
-            }
-
-        }
+//        if let tasks = tasks {
+//            print(tasks.count)
+//            if tasks.count == 0 {
+//                welcomeLabel.isHidden = false
+//            }
+//
+//        }
        
 
         //            self.todoItemTitle = UserDefaults.standard.stringArray(forKey: "todoItemsTitle") ?? []
@@ -201,7 +206,7 @@ class TodoListViewController: UIViewController {
         }
         
         todoListCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.top).inset(20)
+            make.top.equalTo(view.snp.top).inset(100)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(editTodoButton.snp.top).inset(-30)
         }
@@ -236,26 +241,20 @@ class TodoListViewController: UIViewController {
     
     //CRUD functions
     func addTask(todo: Task) {
-        if var newTask = tasks {
-            newTask.append(todo)
-            tasks = newTask
+            tasks.append(todo)
             loadTasks()
-        }
     }
     
     func updateTasks(at index: Int, with newTask: Task) {
-        if var updatedTasks = tasks {
-            updatedTasks[index] = newTask
-            tasks = updatedTasks
+            tasks[index] = newTask
             loadTasks()
-        }
     }
     
     func deleteTask(at index: Int) {
-        if var updatedTasks = tasks {
-            updatedTasks.remove(at: index)
-            tasks = updatedTasks
+            tasks.remove(at: index)
             loadTasks()
+        if tasks.count == 0 {
+            welcomeLabel.isHidden = false
         }
     }
     
@@ -288,7 +287,7 @@ extension TodoListViewController: UICollectionViewDelegate, UICollectionViewData
         
         navigationController?.pushViewController(addTodoItemVC, animated: true)
         
-        if var selectedTask = tasks?[indexPath.item] {
+        let selectedTask = tasks[indexPath.item]
             addTodoItemVC.selectedTask = selectedTask
             addTodoItemVC.selectedItemIndex = indexPath.item
             //                selectedTask.title = addTodoItemVC.todoItemTitleTextField.text ?? ""
@@ -298,15 +297,15 @@ extension TodoListViewController: UICollectionViewDelegate, UICollectionViewData
             
             
             //            todoListCollectionView.reloadData()
-        } else {
-            fatalError("task is nil")
-        }
+        
     }
+    
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return tasks?.count ?? 1
+        return tasks.count
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodoCollectionViewCell.cellId, for: indexPath) as? TodoCollectionViewCell else {
@@ -318,10 +317,10 @@ extension TodoListViewController: UICollectionViewDelegate, UICollectionViewData
         //        return cell
         
         
-        if let taskTodo = tasks?[indexPath.row] {
+        let taskTodo = tasks[indexPath.item]
             cell.todoItemTitle.text = taskTodo.title
             cell.todoItemDescription.text = taskTodo.description
-        }
+        
         
         if !editingMode {
             cell.deleteButton.isHidden = true
@@ -331,7 +330,7 @@ extension TodoListViewController: UICollectionViewDelegate, UICollectionViewData
             print(editingMode)
         }
         
-        
+    
         cell.delegate = self
         cell.deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         
@@ -343,8 +342,8 @@ extension TodoListViewController: UICollectionViewDelegate, UICollectionViewData
             return
         }
         print("delete task")
-        tasks?.remove(at: indexPath.row)
-        todoListCollectionView.performBatchUpdates({todoListCollectionView.deleteItems(at: [indexPath])}, completion: nil)
+        tasks.remove(at: indexPath.item)
+//        todoListCollectionView.performBatchUpdates({todoListCollectionView.deleteItems(at: [indexPath])}, completion: nil)
 
 //        if let taskTodo = tasks?[indexPath.row] {
 //            cell.todoItemTitle.text = taskTodo.title
@@ -364,12 +363,21 @@ extension TodoListViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeCellKit.SwipeActionsOrientation) -> [SwipeCellKit.SwipeAction]? {
         guard orientation == .right else { return nil }
         
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { [weak self] action, indexPath in
-            guard let task = self?.tasks?[indexPath.row] else { return }
-            self?.deleteTask(at: indexPath.row)
-            print(indexPath.item)
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            print(self.tasks.count)
+            DispatchQueue.main.async {
+                self.deleteTask(at: indexPath.row)
+                self.todoListCollectionView.reloadData()
+            }
+//            self.tasks.remove(at: indexPath.row)
+//            self.deleteTask(at: indexPath.row)
+//            self.deleteTask(at: indexPath.item)
+            print("удаляемый элемент \(indexPath.item)")
+            print("task count after deleting \(self.tasks.count)")
+
+            print(self.tasks)
             action.fulfill(with: .delete)
-//            self.todoListCollectionView.performBatchUpdates({self.todoListCollectionView.deleteItems(at: [indexPath])}, completion: nil)
+    //                        self.todoListCollectionView.performBatchUpdates({self.todoListCollectionView.deleteItems(at: [indexPath])}, completion: nil)
 
         }
         
@@ -411,10 +419,9 @@ extension TodoListViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if var dragedTasks = tasks {
-            let task = dragedTasks.remove(at: sourceIndexPath.row)
-            dragedTasks.insert(task, at: destinationIndexPath.row)
-        }
+            let dragedTasks = tasks.remove(at: sourceIndexPath.item)
+            tasks.insert(dragedTasks, at: destinationIndexPath.item)
+        
 
     }
     
