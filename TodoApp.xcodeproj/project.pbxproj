@@ -81,7 +81,6 @@
 			children = (
 				CE5FF1A029F1267700BC9D93 /* AddToDoItemViewController.swift */,
 				CECBB10B29ED9525009446E2 /* TodoListViewController.swift */,
-				CE6849632A0928F200E89E39 /* README.md */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -115,6 +114,7 @@
 		CECBB10629ED9525009446E2 /* TodoApp */ = {
 			isa = PBXGroup;
 			children = (
+				CE6849632A0928F200E89E39 /* README.md */,
 				CE5FF1A429F2B32F00BC9D93 /* Extensions */,
 				CE5FF1A829FB0C8A00BC9D93 /* Model */,
 				CE6849622A0919BC00E89E39 /* View */,
