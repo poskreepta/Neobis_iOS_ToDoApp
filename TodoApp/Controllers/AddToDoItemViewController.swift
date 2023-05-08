@@ -9,22 +9,28 @@ import UIKit
 import SnapKit
 
 protocol AddTodoItemDelegate {
-    func didAddTodoItem(with: Task)
-    func didUpdateTodoItem(at: Int, with: Task)
-
+    
+    func didAddTask(task: Task)
+    
+    func didUpdateTask(at: Int, with: Task)
+    
 }
+
+
 class AddToDoItemViewController: UIViewController {
     
     var delegate: AddTodoItemDelegate?
-    var selectedItemIndex: Int?
+    var selectedTaskIndex: Int?
     var selectedTask: Task?
-
+    
+    
+    // MARK: Creating UI ELements Programmatically
+    
     lazy var saveItemButton: UIButton = {
         var configuration = UIButton.Configuration.plain()
         configuration.title = "Сохранить"
         let button = UIButton(configuration: configuration, primaryAction: saveItemButtonTapped())
         button.translatesAutoresizingMaskIntoConstraints = false
-    
         return button
     }()
     
@@ -32,8 +38,6 @@ class AddToDoItemViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Отмена", for: .normal)
         button.setTitleColor(.red, for: .normal)
-        
-//        let button = UIButton(configuration: configuration, primaryAction: cancelItemButtonTapped())
         button.addTarget(self, action: #selector(cancelItemButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -43,8 +47,6 @@ class AddToDoItemViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Удалить", for: .normal)
         button.setTitleColor(.red, for: .normal)
-        
-//        let button = UIButton(configuration: configuration, primaryAction: cancelItemButtonTapped())
         button.addTarget(self, action: #selector(deleteItemButtonTapped), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -53,11 +55,12 @@ class AddToDoItemViewController: UIViewController {
     var todoItemTitleTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
-//        textField.placeholder = "Название"
         textField.keyboardType = .default
         textField.textAlignment = .left
+        textField.returnKeyType = .done
         textField.attributedPlaceholder = NSAttributedString(string: "Название", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         textField.backgroundColor = .white
+        textField.autocapitalizationType = .sentences
         textField.textColor = .black
         textField.layer.cornerRadius = 15
         textField.clipsToBounds = true
@@ -68,11 +71,12 @@ class AddToDoItemViewController: UIViewController {
     var descriptionTodoItemTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
-//        textField.placeholder = "Название"
         textField.keyboardType = .default
         textField.textAlignment = .left
+        textField.returnKeyType = .done
         textField.attributedPlaceholder = NSAttributedString(string: "Описание", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         textField.backgroundColor = .white
+        textField.autocapitalizationType = .sentences
         textField.textColor = .black
         textField.layer.cornerRadius = 15
         textField.clipsToBounds = true
@@ -80,38 +84,25 @@ class AddToDoItemViewController: UIViewController {
         return textField
     }()
     
-//    init(task: Task = Task(title: "", description: "")) {
-//        descriptionTodoItemTextField.text = task.description
-//        todoItemTitleTextField.text = task.title
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
         setupConstraints()
+        
         view.backgroundColor = UIColor(hexString: "#F6F5F7")
-        // Do any additional setup after loading the view.
         navigationController?.isNavigationBarHidden = true
         deleteItemButton.isHidden = true
         
         if let task = selectedTask {
-            
             todoItemTitleTextField.text = task.title
             descriptionTodoItemTextField.text = task.description
-            
         }
         
-//        if let index = selectedItemIndex {
-//            let task = tasks
-//        }
     }
     
+    // MARK: Setup Views
     
     func setupView() {
         
@@ -122,8 +113,10 @@ class AddToDoItemViewController: UIViewController {
         view.addSubview(deleteItemButton)
     }
     
+    
+    // MARK: Setup Contstraints
+    
     func setupConstraints() {
-        
         
         cancelItemButton.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading).offset(-20)
@@ -131,21 +124,21 @@ class AddToDoItemViewController: UIViewController {
             make.width.equalTo(150)
             make.height.equalTo(40)
         }
-
+        
         saveItemButton.snp.makeConstraints { make in
             make.top.equalTo(view.snp.top).inset(50)
             make.trailing.equalTo(view.snp.trailing).offset(20)
             make.width.equalTo(150)
             make.height.equalTo(40)
         }
-
+        
         todoItemTitleTextField.snp.makeConstraints { make in
             make.top.equalTo(cancelItemButton.snp.bottom).offset(40)
             make.leading.equalTo(view.snp.leading).inset(30)
             make.trailing.equalTo(view.snp.trailing).inset(30)
             make.height.equalTo(60)
         }
-
+        
         descriptionTodoItemTextField.snp.makeConstraints { make in
             make.top.equalTo(todoItemTitleTextField.snp.bottom).offset(30)
             make.leading.equalTo(view.snp.leading).inset(30)
@@ -158,10 +151,10 @@ class AddToDoItemViewController: UIViewController {
             make.centerX.equalTo(view.snp.centerX)
         }
         
-        
-        
-        
     }
+    
+    
+    // MARK: Setup Methods
     
     @objc func saveItemButtonTapped() -> UIAction {
         let action = UIAction { _ in
@@ -169,42 +162,20 @@ class AddToDoItemViewController: UIViewController {
                 return
             }
             
-//            if var task = self.selectedTask {
-//                task.title = title
-//                task.description = description
-//                self.selectedTask = task
-//                print(task.title)
-//                print(task.description)
-//                let updatedTask = task
-//                self.delegate?.didUpdateTodoItem(at: updatedTask)
-//            }
-            
-            if let indexPath = self.selectedItemIndex {
+            if let indexPath = self.selectedTaskIndex {
                 var task = self.selectedTask ?? Task()
                 task.title = title
                 task.description = description
                 self.selectedTask = task
-                self.delegate?.didUpdateTodoItem(at: indexPath, with: self.selectedTask!)
-//                task?.title = title
-//                task?.description = description
-                print(task.title)
-                print(task.description)
-//                print(indexPath)
-                
-                
+                self.delegate?.didUpdateTask(at: indexPath, with: self.selectedTask!)
             } else {
                 let newTask = Task(title: title, description: description)
-                
-                self.delegate?.didAddTodoItem(with: newTask)
-                
-                
-                print("koko")
+                self.delegate?.didAddTask(task: newTask)
             }
             
             self.navigationController?.popViewController(animated: true)
         }
         
-
         return action
     }
     
@@ -215,17 +186,19 @@ class AddToDoItemViewController: UIViewController {
     @objc func deleteItemButtonTapped() {
         
     }
-
+    
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    
 }
 
 
 
-//func hideKeyboardWhenTappedAround() {
-//    let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-//    tap.cancelsTouchesInView = false
-//    view.addGestureRecognizer(tap)
-//}
-//
-//@objc func dismissKeyboard() {
-//    view.endEditing(true)
-//}
