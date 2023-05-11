@@ -20,26 +20,22 @@ class TodoCollectionViewCell: SwipeCollectionViewCell {
     // MARK: Creating UI ELements Programmatically
     lazy var taskTitle: UILabel = {
         let label = UILabel()
+        label.configure()
         label.text = ""
         label.textColor = .black
         label.textAlignment = .left
-        label.lineBreakMode = .byTruncatingTail
-        label.numberOfLines = 1
-        label.font = UIFont.systemFont(ofSize: 18)
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     lazy var taskDescription: UILabel = {
         let label = UILabel()
+        label.configure()
         label.text = ""
         label.textColor = .black
         label.textAlignment = .left
-        label.lineBreakMode = .byTruncatingTail
-        label.numberOfLines = 1
         label.font = UIFont.systemFont(ofSize: 15)
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 2
         return label
     }()
     
@@ -114,13 +110,16 @@ class TodoCollectionViewCell: SwipeCollectionViewCell {
     func setupConstraints() {
         
         taskTitle.snp.makeConstraints { make in
-            make.top.equalTo(snp.top)
+            make.top.equalTo(snp.top).inset(4)
             make.leading.equalTo(completeButton.snp.leading).offset(40)
+            make.trailing.equalTo(imageTaskDetails.snp.leading).inset(-7)
         }
         
         taskDescription.snp.makeConstraints { make in
-            make.top.equalTo(taskTitle).inset(30)
+            make.top.equalTo(taskTitle).inset(26)
             make.leading.equalTo(completeButton.snp.leading).offset(40)
+            make.trailing.equalTo(imageTaskDetails.snp.leading).inset(-7)
+
         }
         
         completeButton.snp.makeConstraints { make in

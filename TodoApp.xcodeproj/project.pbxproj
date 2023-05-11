@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F1194173B152B45FF407BE5 /* Pods_TodoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 946D323DDF76118012509C34 /* Pods_TodoApp.framework */; };
+		CE50B7392A0CDC6800348E5C /* Extansion + UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE50B7382A0CDC6800348E5C /* Extansion + UILabel.swift */; };
 		CE5FF19F29EED25000BC9D93 /* TodoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5FF19E29EED25000BC9D93 /* TodoCollectionViewCell.swift */; };
 		CE5FF1A129F1267700BC9D93 /* AddToDoItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5FF1A029F1267700BC9D93 /* AddToDoItemViewController.swift */; };
 		CE5FF1A629F2B36A00BC9D93 /* Extension + UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5FF1A529F2B36A00BC9D93 /* Extension + UIColor.swift */; };
@@ -23,6 +24,7 @@
 /* Begin PBXFileReference section */
 		5EE4DCFF4DED9151C8C44350 /* Pods-TodoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TodoApp.debug.xcconfig"; path = "Target Support Files/Pods-TodoApp/Pods-TodoApp.debug.xcconfig"; sourceTree = "<group>"; };
 		946D323DDF76118012509C34 /* Pods_TodoApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TodoApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE50B7382A0CDC6800348E5C /* Extansion + UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extansion + UILabel.swift"; sourceTree = "<group>"; };
 		CE5FF19E29EED25000BC9D93 /* TodoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCollectionViewCell.swift; sourceTree = "<group>"; };
 		CE5FF1A029F1267700BC9D93 /* AddToDoItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToDoItemViewController.swift; sourceTree = "<group>"; };
 		CE5FF1A529F2B36A00BC9D93 /* Extension + UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension + UIColor.swift"; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				CE5FF1A529F2B36A00BC9D93 /* Extension + UIColor.swift */,
+				CE50B7382A0CDC6800348E5C /* Extansion + UILabel.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				CE5FF1A629F2B36A00BC9D93 /* Extension + UIColor.swift in Sources */,
 				CECBB10829ED9525009446E2 /* AppDelegate.swift in Sources */,
 				CE5FF19F29EED25000BC9D93 /* TodoCollectionViewCell.swift in Sources */,
+				CE50B7392A0CDC6800348E5C /* Extansion + UILabel.swift in Sources */,
 				CECBB10A29ED9525009446E2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,6 +418,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -443,6 +448,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

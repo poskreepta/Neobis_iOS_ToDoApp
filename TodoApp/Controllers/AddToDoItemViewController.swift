@@ -68,20 +68,24 @@ class AddToDoItemViewController: UIViewController {
         return textField
     }()
     
-    var descriptionTodoItemTextField: UITextField = {
-        let textField = UITextField()
-        textField.borderStyle = .roundedRect
-        textField.keyboardType = .default
-        textField.textAlignment = .left
-        textField.returnKeyType = .done
-        textField.attributedPlaceholder = NSAttributedString(string: "Описание", attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
-        textField.backgroundColor = .white
-        textField.autocapitalizationType = .sentences
-        textField.textColor = .black
-        textField.layer.cornerRadius = 15
-        textField.clipsToBounds = true
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        return textField
+    var descriptionTodoItemTextField: UITextView = {
+        let textView = UITextView()
+        textView.keyboardType = .default
+        textView.textAlignment = .left
+        textView.returnKeyType = .done
+        textView.isScrollEnabled = true
+        textView.font = UIFont.systemFont(ofSize: 16)
+//        textView.attributedText =     NSAttributedString(
+//            string: "Описание",
+//            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray, .font: UIFont.systemFont(ofSize: 17)
+//])
+        textView.backgroundColor = .white
+        textView.autocapitalizationType = .sentences
+        textView.textColor = .black
+        textView.layer.cornerRadius = 15
+        textView.clipsToBounds = true
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        return textView
     }()
     
     
